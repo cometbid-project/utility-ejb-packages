@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence 
+                    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">            
+    <persistence-unit name="COMETBID_UT_PU" transaction-type="JTA">
+        <!-- <jta-data-source>DS2</jta-data-source> -->        
+        <provider>org.hibernate.ogm.jpa.HibernateOgmPersistence</provider>       
+        
+        <class>com.cometbid.ut.entities.AccountTypeEO</class>
+        <class>com.cometbid.ut.entities.CountryEO</class>
+        <class>com.cometbid.ut.entities.CurrencyEO</class>
+        <class>com.cometbid.ut.entities.LanguageEO</class>
+        <class>com.cometbid.ut.entities.RegionEO</class>
+        <class>com.cometbid.ut.entities.StateProvEO</class>
+        <class>com.cometbid.ut.entities.StatisticsData</class>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <properties>
+            
+            <!-- Query Caching is tricky and often harmful (even if turned on but not used)! 
+            See http://tech.puredanger.com/2009/07/10/hibernate-query-cache/
+            <property name="hibernate.cache.use_query_cache" value="false"/>  -->
+            <!--- ******** Log-Settings for SQL statements ******** -->
+            <!--
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.generate_statistics" value="false"/>
+            -->
+            <!-- ********* Deactivated Creation of Database structure on deployment ******* 
+            possible values "update, validate, create, create-drop, and none" -->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="none"/> -->
+            <!-- ********* Transaction settings for CMT ******* -->
+            <property name="hibernate.transaction.jta.platform" 
+                      value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.ogm.datastore.provider" value="mongodb"/>
+            <property name="hibernate.ogm.datastore.database" value="glassfish_db"/>
+            <property name="hibernate.ogm.mongodb.authentication_database" value="glassfish_db"/>
+            <property name="hibernate.ogm.mongodb.host" value="127.0.0.1"/>
+            <property name="hibernate.ogm.mongodb.port" value="27017"/>
+            <property name="hibernate.ogm.datastore.username" value="glassfish_user"/>
+            <property name="hibernate.ogm.datastore.password" value="mypassword"/>
+            <!-- <property name="hibernate.ogm.mongodb.authentication_mechanism" value="BEST"/> -->
+            <property name="hibernate.ogm.mongodb.authentication_mechanism" value="SCRAM_SHA_1"/>            
+            <property name="hibernate.ogm.mongodb.connection_timeout" value="2000"></property>
+            <property name="hibernate.ogm.datastore.document.association_storage" value="IN_ENTITY"></property>
+            <!--
+            <property name="hibernate.ogm.mongodb.association_document_storage" value="COLLECTION_PER_ASSOCIATION"></property> 
+            <property name="hibernate.ogm.mongodb.write_concern" value="MAJORITY"></property>
+            <property name="hibernate.ogm.mongodb.read_preference" value="PRIMARY_PREFERRED"></property>
+            -->
+            <property name="hibernate.ogm.error_handler" 
+                      value="com.cometbid.commerce.ut.handler.MongoDBErrorHandler"/>
+            <!-- ********** Hibernate Search Properties ************** 
+            <property name="hibernate.search.default.directory_provider" value="filesystem"/>
+            <property name="hibernate.search.default.indexBase" value="./Indexes"/>
+            <property name="hibernate.search.default.locking_strategy" value="single"/>
+            <property name="hibernate.search.default.optimizer.operation_limit.max" value="1000"/>
+            <property name="hibernate.search.worker.execution" value="async"/>
+            <property name="hibernate.search.worker.thread_pool.size" value="1"/>
+            <property name="hibernate.search.worker.buffer_queue.max" value="100"/>
+            <property name="hibernate.search.Rules.directory_provider" value="ram"/>
+            -->
+        </properties>     
+    </persistence-unit>
+</persistence>
