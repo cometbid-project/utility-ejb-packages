@@ -5,8 +5,6 @@
  */
 package com.cometbid.commerce.ut.services;
 
-import com.cometbid.commerce.ut.cdi.HitCounterInterceptor;
-import com.cometbid.commerce.ut.cdi.TimeInMethodInterceptor;
 import com.cometbid.commerce.ut.cdi.ValidationInterceptor;
 import com.cometbid.commerce.ut.common.BatchUploadFacade;
 import com.cometbid.commerce.ut.common.DomainObject;
@@ -15,7 +13,6 @@ import com.cometbid.commerce.ut.extra.MemoryCache;
 import com.cometbid.commerce.ut.qualifiers.JavaUtilLogger;
 import com.cometbid.commerce.ut.qualifiers.Logged;
 import com.cometbid.ut.entities.AccountTypeEO;
-import com.cometbid.ut.entities.CountryEO;
 import com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException;
 import com.jcabi.aspects.RetryOnFailure;
 import java.util.Collection;
@@ -27,12 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import javax.ejb.AccessTimeout;
 import javax.ejb.EJBException;
-import javax.ejb.Lock;
-import static javax.ejb.LockType.READ;
-import static javax.ejb.LockType.WRITE;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -40,23 +32,18 @@ import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.DependsOn;
+import javax.ejb.Stateless;
 import javax.persistence.OptimisticLockException;
 
 /**
  *
  * @author Gbenga
  */
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-//@Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
+// @AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
+// @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implements AccountTypeFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -89,7 +76,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      *
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getSubscriptionWithCount() throws SubscriptionTypeNotFoundException {
 
@@ -121,7 +108,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return @throws
      * com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Collection<DomainObject> getSubscriptionWithoutCount() throws SubscriptionTypeNotFoundException {
 
@@ -150,7 +137,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public AccountTypeEO getSubscriptionObject(Integer subscriptionId)
             throws SubscriptionTypeNotFoundException {
@@ -182,7 +169,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getSubscriptionType(Integer subscriptionId) throws SubscriptionTypeNotFoundException {
 
@@ -196,7 +183,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public double getPercentageTraxFee(Integer subscriptionId) throws SubscriptionTypeNotFoundException {
 
@@ -209,7 +196,7 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getSubscriptionDescription(Integer subscriptionId) throws SubscriptionTypeNotFoundException {
 
@@ -222,7 +209,6 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(READ)
     @Override
     public double getSpaceQuota(Integer subscriptionId) throws SubscriptionTypeNotFoundException {
 
@@ -235,7 +221,6 @@ public class AccountTypeFacade extends BatchUploadFacade<AccountTypeEO> implemen
      * @return
      * @throws com.cometbid.ut.exceptions.SubscriptionTypeNotFoundException
      */
-    @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)

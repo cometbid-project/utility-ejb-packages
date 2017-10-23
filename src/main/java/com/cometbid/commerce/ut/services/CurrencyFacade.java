@@ -5,8 +5,6 @@
  */
 package com.cometbid.commerce.ut.services;
 
-import com.cometbid.commerce.ut.cdi.HitCounterInterceptor;
-import com.cometbid.commerce.ut.cdi.TimeInMethodInterceptor;
 import com.cometbid.commerce.ut.cdi.ValidationInterceptor;
 import com.cometbid.commerce.ut.common.BatchUploadFacade;
 import com.cometbid.commerce.ut.common.DomainObject;
@@ -15,7 +13,6 @@ import com.cometbid.commerce.ut.extra.MemoryCache;
 import com.cometbid.commerce.ut.qualifiers.JavaUtilLogger;
 import com.cometbid.commerce.ut.qualifiers.Logged;
 import com.cometbid.ut.entities.CurrencyEO;
-import com.cometbid.ut.entities.RegionEO;
 import com.cometbid.ut.exceptions.CurrencyNotFoundException;
 import com.jcabi.aspects.RetryOnFailure;
 import java.util.Collection;
@@ -30,20 +27,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.ejb.EJBException;
-import javax.ejb.Lock;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
-import javax.ejb.AccessTimeout;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.DependsOn;
-import static javax.ejb.LockType.READ;
-import static javax.ejb.LockType.WRITE;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.persistence.OptimisticLockException;
 
@@ -51,14 +39,8 @@ import javax.persistence.OptimisticLockException;
  *
  * @author Gbenga
  */
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-// @Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
 public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements CurrencyFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -84,7 +66,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      *
      * @return @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getCurrenciesWithCount() throws CurrencyNotFoundException {
 
@@ -116,7 +98,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      *
      * @return @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Collection<DomainObject> getCurrenciesWithoutCount() throws CurrencyNotFoundException {
 
@@ -146,7 +128,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getCurrenciesPaginated(Integer pageNumber, Integer pageSize)
             throws CurrencyNotFoundException {
@@ -184,7 +166,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public CurrencyEO getCurrencyById(Integer currencyId) throws CurrencyNotFoundException {
 
@@ -215,7 +197,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getCurrencyCodeById(Integer currencyId) throws CurrencyNotFoundException {
 
@@ -228,7 +210,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public String getCurrencyNameById(Integer currencyId) throws CurrencyNotFoundException {
 
@@ -278,7 +260,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getCurrencySymbol(Integer currencyId) throws CurrencyNotFoundException {
 
@@ -290,7 +272,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @param newCurrency
      * @return
      */
-    @Lock(WRITE)
+ //   @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     public CurrencyEO addCurrency(CurrencyEO newCurrency) {
@@ -320,7 +302,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @return
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
@@ -373,7 +355,7 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
      * @param currencyId
      * @throws com.cometbid.ut.exceptions.CurrencyNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     public void removeCurrency(Integer currencyId) throws CurrencyNotFoundException {
 
@@ -406,7 +388,6 @@ public class CurrencyFacade extends BatchUploadFacade<CurrencyEO> implements Cur
     }
 
     @Override
-  //  @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = RuntimeException.class)
     public void bulkLoadCurrencies(List<CurrencyEO> currencyList) {
         Iterator<CurrencyEO> iter = currencyList.iterator();
         while (iter.hasNext()) {

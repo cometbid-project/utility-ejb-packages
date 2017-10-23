@@ -55,6 +55,8 @@ public class TimerManagerService extends BatchUploadFacade<StatisticsData> {
         Map<String, StatisticsData> stats = ApplicationStatistics.getInstance().getStatisticsCache();
 
         super.bulkInsertOrMerge(stats);
+        
+        stats.clear();
     }
 
 }

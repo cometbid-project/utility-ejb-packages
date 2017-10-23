@@ -5,8 +5,6 @@
  */
 package com.cometbid.commerce.ut.services;
 
-import com.cometbid.commerce.ut.cdi.HitCounterInterceptor;
-import com.cometbid.commerce.ut.cdi.TimeInMethodInterceptor;
 import com.cometbid.commerce.ut.cdi.ValidationInterceptor;
 import com.cometbid.commerce.ut.common.BatchUploadFacade;
 import com.cometbid.commerce.ut.common.DomainObject;
@@ -34,38 +32,21 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import javax.ejb.AccessTimeout;
-import javax.ejb.Lock;
-import static javax.ejb.LockType.READ;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.DependsOn;
 import javax.ejb.EJBException;
-import static javax.ejb.LockType.WRITE;
+import javax.ejb.Stateless;
 import javax.persistence.OptimisticLockException;
 
 /**
  *
  * @author Gbenga
  */
-
-
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-//@Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
 public class CountryFacade extends BatchUploadFacade<CountryEO> implements CountryFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -93,7 +74,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      *
      * @return @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getCountriesWithCount() throws CountryNotFoundException {
 
@@ -124,7 +104,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      *
      * @return @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public Collection<DomainObject> getCountriesWithoutCount() throws CountryNotFoundException {
 
@@ -155,7 +135,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getCountriesPaginated(Integer pageNumber, Integer pageSize)
             throws CountryNotFoundException {
@@ -194,7 +174,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public CountryEO getCountryById(Integer countryId) throws CountryNotFoundException {
 
@@ -226,7 +206,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public int getCountryCodeById(Integer countryId) throws CountryNotFoundException {
 
@@ -240,7 +220,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public String getCountryNameById(Integer countryId) throws CountryNotFoundException {
 
@@ -254,7 +234,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public String getCountryCapitalCity(Integer countryId) throws CountryNotFoundException {
 
@@ -268,7 +248,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+//    @Lock(READ)
     @Override
     public long getCountryPopulation(Integer countryId) throws CountryNotFoundException {
 
@@ -282,7 +262,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+//    @Lock(READ)
     @Override
     public RegionEO getCountryRegion(Integer countryId) throws CountryNotFoundException {
 
@@ -296,7 +276,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public String getAlphaTwoLetterCode(Integer countryId) throws CountryNotFoundException {
 
@@ -310,7 +290,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public String getAlphaThreeLetterCode(Integer countryId) throws CountryNotFoundException {
 
@@ -324,7 +304,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+//    @Lock(READ)
     @Override
     public CurrencyEO getCountryStandardCurrency(Integer countryId) throws CountryNotFoundException {
 
@@ -337,7 +317,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public Set<String> getCountryCallingCodes(Integer countryId) throws CountryNotFoundException {
 
@@ -353,7 +333,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public Set<String> getCountryDiallingCodes(Integer countryId) throws CountryNotFoundException {
 
@@ -369,7 +349,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public Set<Integer> getCountryPhoneFormats(Integer countryId) throws CountryNotFoundException {
 
@@ -385,7 +365,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    //   @Lock(READ)
     @Override
     public List<StateProvEO> getCountryStateList(Integer countryId) throws CountryNotFoundException {
 
@@ -403,7 +383,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    // @Lock(READ)
     @Override
     public Map<Integer, Collection<StateProvEO>> getCountryStateListPaginated(Integer countryId,
             Integer pageNumber, Integer pageSize) throws CountryNotFoundException {
@@ -424,7 +404,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @param newCountry
      * @return
      */
-    @Lock(WRITE)
+    //   @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     public CountryEO addCountry(CountryEO newCountry) {
@@ -453,7 +433,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    //  @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO editCountry(CountryEO updatedCountry)
@@ -511,7 +491,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @param countryId
      * @throws CountryNotFoundException
      */
-    @Lock(WRITE)
+    //  @Lock(WRITE)
     @Override
     public void removeCountry(Integer countryId) throws CountryNotFoundException {
 
@@ -548,7 +528,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    //  @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO addCallingCodeToCountry(Integer countryId, String callingCode) throws CountryNotFoundException {
@@ -592,7 +572,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    //  @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO removeCallingCodeFromCountry(Integer countryId, String callingCode) throws CountryNotFoundException {
@@ -637,7 +617,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    // @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO addPhoneFormatToCountry(Integer countryId, Integer phoneFormat) throws CountryNotFoundException {
@@ -681,7 +661,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    // @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO removePhoneFormatFromCountry(Integer countryId, Integer phoneFormat) throws CountryNotFoundException {
@@ -725,7 +705,7 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    //  @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO addDiallingCodeToCountry(Integer countryId, String diallingCode) throws CountryNotFoundException {
@@ -769,7 +749,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public CountryEO removeDiallingCodeFromCountry(Integer countryId, String diallingCode)
@@ -812,7 +791,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
      * @param countryList
      */
     @Override
-    // @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = RuntimeException.class)
     public void bulkLoadCountries(List<CountryEO> countryList) {
         Iterator<CountryEO> iter = countryList.iterator();
         while (iter.hasNext()) {
@@ -860,7 +838,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
         }
     }
 
-    // @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     @Override
     public void bulkLoadCallingCode(List<CallingCode> callingCodeList) {
         Iterator<CallingCode> iter = callingCodeList.iterator();
@@ -878,7 +855,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
         }
     }
 
-    //   @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     @Override
     public void bulkLoadDiallingCode(List<DiallingCode> diallingCodeList) {
         Iterator<DiallingCode> iter = diallingCodeList.iterator();
@@ -896,7 +872,6 @@ public class CountryFacade extends BatchUploadFacade<CountryEO> implements Count
         }
     }
 
-    //   @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     @Override
     public void bulkLoadPhoneFormat(List<PhoneFormat> phoneFormatList) {
         Iterator<PhoneFormat> iter = phoneFormatList.iterator();

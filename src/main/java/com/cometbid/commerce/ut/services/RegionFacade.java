@@ -5,8 +5,6 @@
  */
 package com.cometbid.commerce.ut.services;
 
-import com.cometbid.commerce.ut.cdi.HitCounterInterceptor;
-import com.cometbid.commerce.ut.cdi.TimeInMethodInterceptor;
 import com.cometbid.commerce.ut.common.BatchUploadFacade;
 import com.cometbid.commerce.ut.common.DomainObject;
 import com.cometbid.commerce.ut.extra.GlobalConstants;
@@ -23,36 +21,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import javax.ejb.AccessTimeout;
-import javax.ejb.Lock;
-import static javax.ejb.LockType.READ;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.DependsOn;
 import javax.ejb.EJBException;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author Gbenga
  */
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-// @Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
 public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -78,7 +60,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      *
      * @return @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getRegionsWithCount() throws RegionNotFoundException {
 
@@ -110,7 +92,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      *
      * @return @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Collection<DomainObject> getRegionsWithoutCount() throws RegionNotFoundException {
 
@@ -141,7 +123,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      * @return
      * @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public RegionEO getRegionById(Integer regionId) throws RegionNotFoundException {
 
@@ -172,7 +154,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      * @return
      * @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getRegionCodeById(Integer regionId) throws RegionNotFoundException {
 
@@ -185,7 +167,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      * @return
      * @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getRegionNameById(Integer regionId) throws RegionNotFoundException {
 
@@ -198,7 +180,7 @@ public class RegionFacade extends BatchUploadFacade<RegionEO> implements RegionF
      * @return
      * @throws com.cometbid.ut.exceptions.RegionNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public List<CountryEO> getRegionCountries(Integer regionId) throws RegionNotFoundException {
 

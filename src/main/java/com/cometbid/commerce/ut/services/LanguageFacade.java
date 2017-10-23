@@ -5,8 +5,6 @@
  */
 package com.cometbid.commerce.ut.services;
 
-import com.cometbid.commerce.ut.cdi.HitCounterInterceptor;
-import com.cometbid.commerce.ut.cdi.TimeInMethodInterceptor;
 import com.cometbid.commerce.ut.cdi.ValidationInterceptor;
 import com.cometbid.commerce.ut.common.BatchUploadFacade;
 import com.cometbid.commerce.ut.common.DomainObject;
@@ -14,7 +12,6 @@ import com.cometbid.commerce.ut.extra.GlobalConstants;
 import com.cometbid.commerce.ut.extra.MemoryCache;
 import com.cometbid.commerce.ut.qualifiers.JavaUtilLogger;
 import com.cometbid.commerce.ut.qualifiers.Logged;
-import com.cometbid.ut.entities.CountryEO;
 import com.cometbid.ut.entities.LanguageEO;
 import com.cometbid.ut.exceptions.LanguageNotFoundException;
 import com.jcabi.aspects.RetryOnFailure;
@@ -29,17 +26,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.AccessTimeout;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.DependsOn;
 import javax.ejb.EJBException;
-import javax.ejb.Lock;
-import static javax.ejb.LockType.READ;
-import static javax.ejb.LockType.WRITE;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
@@ -50,14 +38,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author Gbenga
  */
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-// @Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
 public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements LanguageFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -83,7 +65,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      *
      * @return @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public Map<Integer, Collection<DomainObject>> getLanguagesWithCount() throws LanguageNotFoundException {
 
@@ -114,7 +96,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      *
      * @return @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public Collection<DomainObject> getLanguagesWithoutCount() throws LanguageNotFoundException {
 
@@ -146,7 +128,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @return
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public Map<Integer, List<DomainObject>> getLanguagesPaginated(Integer pageNumber, Integer pageSize)
             throws LanguageNotFoundException {
@@ -185,7 +167,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @return
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public LanguageEO getLanguageById(Integer langaugeId) throws LanguageNotFoundException {
 
@@ -215,7 +197,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @return
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+   // @Lock(READ)
     @Override
     public String getLanguageCodeById(Integer languageId) throws LanguageNotFoundException {
 
@@ -228,7 +210,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @return
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(READ)
+  //  @Lock(READ)
     @Override
     public String getLanguageNameById(Integer languageId) throws LanguageNotFoundException {
 
@@ -241,7 +223,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @param newLanguage
      * @return
      */
-    @Lock(WRITE)
+ //   @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     public LanguageEO addLanguage(LanguageEO newLanguage) {
@@ -270,7 +252,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @return
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(WRITE)
+ //   @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
@@ -322,7 +304,7 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
      * @param languageId
      * @throws com.cometbid.ut.exceptions.LanguageNotFoundException
      */
-    @Lock(WRITE)
+ //   @Lock(WRITE)
     @Override
     public void removeLanguage(Integer languageId) throws LanguageNotFoundException {
 
@@ -355,7 +337,6 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
     }
 
     @Override
-    //   @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = RuntimeException.class)
     public void bulkLoadLanguages(List<LanguageEO> languageList) {
         Iterator<LanguageEO> iter = languageList.iterator();
         while (iter.hasNext()) {
@@ -365,5 +346,4 @@ public class LanguageFacade extends BatchUploadFacade<LanguageEO> implements Lan
             create(language);
         }
     }
-
 }

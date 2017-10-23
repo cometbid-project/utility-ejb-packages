@@ -142,14 +142,6 @@ public class MemoryCache {
         return stateProvDataCache.get(countryId);
     }
 
-    /*
-    @Lock(LockType.WRITE)
-    @AccessTimeout(unit = TimeUnit.SECONDS, value = TEN_SECONDS)
-    public void putInUtilityDataCache(String keyString, Map<Integer, DomainObject> dataMap)
-    throws ExecutionException {
-    
-    utilityDataCache.put(keyString, dataMap);
-    }*/
     private void loadAllDataToCache() {
 
         String[] strArray = {GlobalConstants.acctTypes, GlobalConstants.countries,

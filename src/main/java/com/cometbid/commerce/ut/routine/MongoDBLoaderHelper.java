@@ -32,6 +32,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -250,9 +251,9 @@ public class MongoDBLoaderHelper {
                 .getResultList();
 
         if (regionList.isEmpty()) {
-            
+
             em.createNativeQuery("db.REGION_TAB.drop()").executeUpdate();
-            
+
             //1. Load the Regions 
             batchloadRegions();
         }
@@ -279,7 +280,7 @@ public class MongoDBLoaderHelper {
 
         if (countryList.isEmpty()) {
             logger.log(Level.INFO, "No record found in MongoDB for Countries...");
-            
+
             em.createNativeQuery("db.CURRENCY_TAB.drop()").executeUpdate();
             //3. Load the Countries
             batchloadCountries();
@@ -329,13 +330,12 @@ public class MongoDBLoaderHelper {
         if (statesList.isEmpty()) {
             logger.log(Level.INFO, "No record found in MongoDB for States/Provinces types...");
 
-             em.createNativeQuery("db.STATE_PROV_TAB.drop()").executeUpdate();
+            em.createNativeQuery("db.STATE_PROV_TAB.drop()").executeUpdate();
             //6. Load the State/Province types
             batchloadStateProvinces();
         }
     }
 
-    @Asynchronous
     private void processFutureQueues() throws Exception {
 
         boolean keepWaiting = true;

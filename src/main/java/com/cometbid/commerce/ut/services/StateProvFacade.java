@@ -42,6 +42,7 @@ import static javax.ejb.LockType.READ;
 import static javax.ejb.LockType.WRITE;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -53,14 +54,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author Gbenga
  */
-@Singleton
-@ApplicationScoped
-@Startup
+@Stateless
 @Logged
-@DependsOn("MemoryCache")
-@AccessTimeout(value = 1, unit = TimeUnit.MINUTES)
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-// @Interceptors({HitCounterInterceptor.class, TimeInMethodInterceptor.class})
 public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements StateProvFacadeLocal {
 
     @PersistenceContext(unitName = "COMETBID_UT_PU")
@@ -93,7 +88,6 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
     }
 
     private void getRecordCount() {
-
         try {
             List<StateProvEO> statesList = em.createNamedQuery("StateProvEO.findAll")
                     .getResultList();
@@ -118,7 +112,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    // @Lock(READ)
     @Override
     public Map<Integer, Collection<StateProvEO>> getStateProvWithCount(Integer countryId)
             throws StateProvNotFoundException, CountryNotFoundException {
@@ -157,7 +151,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(READ)
+    // @Lock(READ)
     @Override
     public Collection<StateProvEO> getStateProvWithoutCount(Integer countryId)
             throws StateProvNotFoundException, CountryNotFoundException {
@@ -193,7 +187,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    // @Lock(READ)
     @Override
     public Map<Integer, List<StateProvEO>> getStateProvByCountryPaginated(Integer countryId,
             Integer pageNumber, Integer pageSize) throws StateProvNotFoundException {
@@ -234,7 +228,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    // @Lock(READ)
     @Override
     public Map<Integer, List<StateProvEO>> getStateProvPaginated(Integer pageNumber, Integer pageSize)
             throws StateProvNotFoundException {
@@ -278,7 +272,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public StateProvEO getStateProvById(Integer stateProvId) throws StateProvNotFoundException {
@@ -311,7 +305,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public String getStateCodeById(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -324,7 +318,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public String getStateNameById(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -337,7 +331,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public int getStateNumCodeById(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -350,7 +344,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public CountryEO getStateCountryById(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -363,7 +357,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public Set<StateCitiesEO> getStateCities(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -376,7 +370,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(READ)
+    //@Lock(READ)
     @Override
     public Set<StateLgaEO> getStateLgas(Integer stateProvId) throws StateProvNotFoundException {
 
@@ -390,7 +384,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      */
-    @Lock(WRITE)
+    //@Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     public StateProvEO addStateProv(StateProvEO newStateProv, Integer countryId)
@@ -447,7 +441,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @throws com.cometbid.ut.exceptions.CountryNotFoundException
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(WRITE)
+    //@Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
@@ -510,7 +504,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      * @throws CountryNotFoundException
      */
-    @Lock(WRITE)
+    //@Lock(WRITE)
     @Override
     public void removeStateProv(Integer countryId, Integer stateProvId)
             throws StateProvNotFoundException, CountryNotFoundException {
@@ -553,7 +547,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public StateProvEO addCityToState(Integer stateId, StateCitiesEO cityToAdd) throws StateProvNotFoundException {
@@ -595,7 +589,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public StateProvEO removeCityFromState(Integer stateId, StateCitiesEO cityToRemove)
@@ -639,7 +633,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
     public StateProvEO addLgaToState(Integer stateId, StateLgaEO lgaToAdd) throws StateProvNotFoundException {
@@ -682,7 +676,7 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
      * @return
      * @throws com.cometbid.ut.exceptions.StateProvNotFoundException
      */
-    @Lock(WRITE)
+   // @Lock(WRITE)
     @Override
     @Interceptors(ValidationInterceptor.class)
     @RetryOnFailure(attempts = 3, delay = 10, unit = TimeUnit.SECONDS, types = OptimisticLockException.class)
@@ -755,5 +749,4 @@ public class StateProvFacade extends BatchUploadFacade<StateProvEO> implements S
 
         return newStateProv;
     }
-
 }
